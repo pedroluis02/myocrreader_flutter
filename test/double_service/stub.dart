@@ -3,6 +3,22 @@ import 'dart:async';
 import 'package:myocrreader_flutter/model/models.dart';
 import 'package:myocrreader_flutter/service/services.dart';
 
+import '../resource/resolver.dart';
+
+class ImageCaptureTestStub implements ImageCaptureService {
+  final String imageName;
+
+  const ImageCaptureTestStub(this.imageName);
+
+  @override
+  Future<ImageCaptureResult> loadImageCapture() async => _loadLocalImage();
+
+  @override
+  Future<ImageCaptureResult> takeImageCapture() async => _loadLocalImage();
+
+  ImageCaptureResult _loadLocalImage() => TestResourceResolver.getResourceAsImageCapture(imageName);
+}
+
 class TextRecognizerTestStub implements TextRecognizerService {
   final String text;
 
@@ -12,7 +28,6 @@ class TextRecognizerTestStub implements TextRecognizerService {
   FutureOr<void> close() {}
 
   @override
-  Future<TextRecognitionResult> recognize(String imagePath) async {
-    return TextRecognitionResult(text, <String>[text]);
-  }
+  Future<TextRecognitionResult> recognize(String imagePath) async =>
+      TextRecognitionResult(text, <String>[text]);
 }
