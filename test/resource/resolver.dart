@@ -4,6 +4,7 @@ import 'package:myocrreader_flutter/model/models.dart';
 
 class TestResourceResolver {
   static const String _assetsDirName = 'assets';
+  static const String sampleImageCapture = 'ocr_sample.jpeg';
 
   const TestResourceResolver._();
 

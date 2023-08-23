@@ -5,6 +5,10 @@ import 'package:myocrreader_flutter/service/services.dart';
 
 import '../resource/resolver.dart';
 
+class SampleImageCaptureTestStub extends ImageCaptureTestStub {
+  const SampleImageCaptureTestStub() : super(TestResourceResolver.sampleImageCapture);
+}
+
 class ImageCaptureTestStub implements ImageCaptureService {
   final String imageName;
 

@@ -1,15 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'double_service/stub.dart';
+import 'double_service/doubles.dart';
 
 void main() {
   setUpAll(() {});
 
-  test('test if image capture exists', () async {
-    const imageTaker = ImageCaptureTestStub('ocr_sample.jpeg');
+  test('test when image capture exists', () async {
+    const imageTaker = SampleImageCaptureTestStub();
     final result = await imageTaker.takeImageCapture();
 
     expect(result.exists(), true, reason: '${result.path} not exists.');
+  });
+
+  test('test when image capture does not exist', () async {
+    const imageTaker = ImageCaptureTestStub('hello.png');
+    final result = await imageTaker.takeImageCapture();
+
+    expect(result.exists(), false, reason: '${result.path} exists.');
   });
 
   test('test text recognition stub', () async {
