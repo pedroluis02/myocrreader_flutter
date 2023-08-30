@@ -43,11 +43,36 @@ void main() {
     expect(find.textContaining('Error:'), findsOneWidget);
   });
 
-  testWidgets('test not empty text recognizer', (WidgetTester tester) async {
+  testWidgets('test not empty text recognizer #1', (WidgetTester tester) async {
+    const sampleImageTaker = SampleImageCaptureTestStub();
+    final imageResult = await sampleImageTaker.loadImageCapture();
+
     const text = 'hello';
+
     const app = OcrReaderApplication(
-      title: 'OCR Widget Test',
-      imageTaker: SampleImageCaptureTestStub(),
+      title: 'OCR Widget Test #1',
+      imageTaker: sampleImageTaker,
+      recognizer: TextRecognizerTestStub(text),
+    );
+
+    await tester.pumpWidget(app);
+
+    await tester.tap(find.byIcon(Icons.image));
+    await tester.pump();
+
+    expect(find.image(FileImage(imageResult.file)), findsOneWidget);
+    expect(find.text(text), findsOneWidget);
+  });
+
+  testWidgets('test not empty text recognizer #2', (WidgetTester tester) async {
+    const sampleImageTaker = SampleImageCaptureTestStub();
+    final imageResult = await sampleImageTaker.loadImageCapture();
+
+    const text = 'hello-word';
+
+    const app = OcrReaderApplication(
+      title: 'OCR Widget Test #2',
+      imageTaker: sampleImageTaker,
       recognizer: TextRecognizerTestStub(text),
     );
 
@@ -56,6 +81,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.camera_alt));
     await tester.pump();
 
+    expect(find.image(FileImage(imageResult.file)), findsOneWidget);
     expect(find.text(text), findsOneWidget);
   });
 }
