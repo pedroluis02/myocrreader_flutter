@@ -22,9 +22,10 @@ class OcrReaderApplication extends StatelessWidget {
       title: title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
       home: TextRecognizerPage(
-        title: 'Home',
+        title: 'Text Recognition',
         imageTaker: imageTaker,
         recognizer: recognizer,
       ),
