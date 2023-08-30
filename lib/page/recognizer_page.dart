@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../model/models.dart';
 import '../service/services.dart';
+import 'image_capture_result.dart';
+import 'status_result.dart';
+
+typedef _ImageTakerFuture = Future<ImageCaptureResult> Function();
 
 class TextRecognizerPage extends StatefulWidget {
   const TextRecognizerPage({
@@ -22,6 +26,7 @@ class TextRecognizerPage extends StatefulWidget {
 
 class _PageState extends State<TextRecognizerPage> {
   late String? _lastErrorMessage;
+  late ImageCaptureResult _imageResult;
   late TextRecognitionResult _textResult;
 
   @override
@@ -29,6 +34,7 @@ class _PageState extends State<TextRecognizerPage> {
     super.initState();
 
     _lastErrorMessage = null;
+    _imageResult = ImageCaptureResult.empty();
     _textResult = TextRecognitionResult.empty();
   }
 
@@ -39,20 +45,9 @@ class _PageState extends State<TextRecognizerPage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Recognize text from image',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            _resultStatusWidget(context),
-            const SizedBox(height: 8),
-            Text(_textResult.text),
-          ],
-        ),
-      ),
+          child: SingleChildScrollView(
+        child: _content(),
+      )),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -73,42 +68,41 @@ class _PageState extends State<TextRecognizerPage> {
     );
   }
 
-  Widget _resultStatusWidget(BuildContext context) {
-    final defTextStyle = Theme.of(context).textTheme.headlineSmall;
-    Color textStyleColor;
-    String message;
-    if (_lastErrorMessage == null) {
-      textStyleColor = Colors.black;
-      message = '';
-    } else if (_lastErrorMessage?.isEmpty == true) {
-      textStyleColor = Colors.green;
-      message = 'OK';
-    } else {
-      textStyleColor = Colors.red;
-      message = 'Error: $_lastErrorMessage';
-    }
-
-    return Text(
-      message,
-      style: defTextStyle?.copyWith(color: textStyleColor, fontWeight: FontWeight.bold),
+  Widget _content() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          'Recognize text from image',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        if (_imageResult.exists())
+          ImageCaptureResultWidget(
+            file: _imageResult.file,
+            margin: const EdgeInsets.only(top: 16),
+          ),
+        const SizedBox(height: 16),
+        StatusResultWidget(lastErrorMessage: _lastErrorMessage),
+        const SizedBox(height: 8),
+        Text(_textResult.text),
+      ],
     );
   }
 
-  void _onSelectImage() async {
-    final result = await widget.imageTaker.loadImageCapture();
-    _processResult(result);
+  void _onSelectImage() {
+    _processSelectedImage(widget.imageTaker.loadImageCapture);
   }
 
-  void _onTakePhoto() async {
-    final result = await widget.imageTaker.takeImageCapture();
-    _processResult(result);
+  void _onTakePhoto() {
+    _processSelectedImage(widget.imageTaker.takeImageCapture);
   }
 
-  void _processResult(ImageCaptureResult result) {
-    debugPrint(result.path);
+  void _processSelectedImage(_ImageTakerFuture imageTakerFunc) async {
+    _imageResult = await imageTakerFunc();
+    debugPrint(_imageResult.path);
 
-    if (result.exists()) {
-      _recognizeImage(result.path);
+    if (_imageResult.exists()) {
+      _recognizeImage(_imageResult.path);
     }
   }
 
