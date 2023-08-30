@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../model/models.dart';
-import '../service/services.dart';
+import '../../model/models.dart';
+import '../../service/services.dart';
 import 'image_capture_result.dart';
 import 'status_result.dart';
 

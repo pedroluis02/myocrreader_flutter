@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../service/services.dart';
-import 'page/recognizer_page.dart';
+import 'feature/home/recognizer_page.dart';
 
 class OcrReaderApplication extends StatelessWidget {
   const OcrReaderApplication({
