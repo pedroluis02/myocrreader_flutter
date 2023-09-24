@@ -66,7 +66,7 @@ void main() {
 
   testWidgets('test not empty text recognizer #2', (WidgetTester tester) async {
     const sampleImageTaker = SampleImageCaptureTestStub();
-    final imageResult = await sampleImageTaker.loadImageCapture();
+    final imageResult = await sampleImageTaker.takeImageCapture();
 
     const text = 'hello-word';
 
