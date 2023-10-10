@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:myocrreader_flutter/model/models.dart';
 import 'package:myocrreader_flutter/service/services.dart';
 
-import '../resource_resolver.dart';
+import '../resource/resource_resolver.dart';
 
 class SampleImageCaptureTestStub extends ImageCaptureTestStub {
   const SampleImageCaptureTestStub() : super(TestResourceResolver.sampleImageCapture);
